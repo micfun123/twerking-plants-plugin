@@ -6,7 +6,6 @@ import tea.twerkingplants.handlers.PlayerHandler;
 
 public final class TwerkingPlants extends JavaPlugin {
 
-
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -23,6 +22,7 @@ public final class TwerkingPlants extends JavaPlugin {
                 Bukkit.getLogger().info("Thank you for using the twerking plants! Feel free to donate here https://www.buymeacoffee.com/Michaelrbparker");
 
         saveDefaultConfig();
+        getServer().getPluginManager().registerEvents(new PlayerHandler(this), this);
 
 
     }
