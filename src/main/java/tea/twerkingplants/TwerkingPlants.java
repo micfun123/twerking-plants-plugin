@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import tea.twerkingplants.handlers.PlayerHandler;
 
+
 public final class TwerkingPlants extends JavaPlugin {
 
     @Override
@@ -14,7 +15,7 @@ public final class TwerkingPlants extends JavaPlugin {
                 " ______  __    __    ___  ____   __  _  ____  ____    ____              ____  _       ____  ____   ______  _____       \n" +
                 "|      ||  |__|  |  /  _]|    \\ |  |/ ]|    ||    \\  /    |            |    \\| |     /    ||    \\ |      |/ ___/       \n" +
                 "|      ||  |  |  | /  [_ |  D  )|  ' /  |  | |  _  ||   __|            |  o  ) |    |  o  ||  _  ||      (   \\_        \n" +
-                "|_|  |_||  |  |  ||    _]|    / |    \\  |  | |  |  ||  |  |            |   _/| |___ |     ||  |  ||_|  |_|\\__  |       \n" +
+                "|_|  |_||  |  |  ||    _]|    / |    \\  |  | |  |  ||  |  |            |   _/| |___ |     ||  |  ||_|   |_|\\__  |       \n" +
                 "  |  |  |  `  '  ||   [_ |    \\ |     \\ |  | |  |  ||  |_ |            |  |  |     ||  _  ||  |  |  |  |  /  \\ |       \n" +
                 "  |  |   \\      / |     ||  .  \\|  .  | |  | |  |  ||     |            |  |  |     ||  |  ||  |  |  |  |  \\    |       \n" +
                 "  |__|    \\_/\\_/  |_____||__|\\_||__|\\_||____||__|__||___,_|            |__|  |_____||__|__||__|__|  |__|   \\___|      \n");
@@ -23,6 +24,7 @@ public final class TwerkingPlants extends JavaPlugin {
 
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new PlayerHandler(this), this);
+
 
 
     }

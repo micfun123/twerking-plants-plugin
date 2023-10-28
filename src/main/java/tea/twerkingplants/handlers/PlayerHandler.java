@@ -1,5 +1,7 @@
 package tea.twerkingplants.handlers;
 
+import com.sun.tools.classfile.ConstantPool;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -18,6 +20,7 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+        Bukkit.getLogger().info("Player toggled sneak");
         Player player = event.getPlayer();
         FileConfiguration config = plugin.getConfig();
         int radius = config.getInt("radius");
@@ -31,7 +34,6 @@ public class PlayerHandler implements Listener {
                     // Check if the block is eligible for bone meal (e.g., grass or crops)
                     if (isEligibleForBoneMeal(targetBlock)) {
                         // Apply bone meal to the block
-                        targetBlock.setType(Material.GRASS); // Replace with the block type you want to change to
                     }
                 }
             }
@@ -42,11 +44,16 @@ public class PlayerHandler implements Listener {
         Material type = block.getType();
         FileConfiguration config = plugin.getConfig();
 
+        Bukkit.getLogger().info("Checking block: " + type.toString());
+
         // Check if the block type is present in the config and set to true
         if (config.contains(type.toString()) && config.getBoolean(type.toString())) {
+            Bukkit.getLogger().info("Block " + type.toString() + " is eligible for bone meal");
             return true;
         }
 
+        Bukkit.getLogger().info("Block " + type.toString() + " is not eligible for bone meal");
         return false;
     }
+
 }

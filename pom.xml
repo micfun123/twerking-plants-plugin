@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Twerking Plants</name>
+    <name>TwerkingPlants</name>
 
     <properties>
         <java.version>1.8</java.version>
