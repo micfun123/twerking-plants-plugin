@@ -3,13 +3,15 @@ package tea.twerkingplants.handlers;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.configuration.file.FileConfiguration;
 import tea.twerkingplants.TwerkingPlants;
-import org.bukkit.World;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlayerHandler implements Listener {
     private TwerkingPlants plugin;
@@ -20,7 +22,6 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        Bukkit.getLogger().info("Player toggled sneak");
         Player player = event.getPlayer();
         FileConfiguration config = plugin.getConfig();
         int radius = config.getInt("radius");
@@ -33,8 +34,21 @@ public class PlayerHandler implements Listener {
 
                     // Check if the block is eligible for bone meal (e.g., grass or crops)
                     if (isEligibleForBoneMeal(targetBlock)) {
-                        // Apply bone meal to the block
-                        targetBlock.getState().update(true);
+                        // Get block age and see if it's maxed out
+                        BlockState state = targetBlock.getState();
+
+                        // Check if it's ageable
+                        if (state.getBlockData() instanceof Ageable) {
+                            Ageable ageable = (Ageable) state.getBlockData();
+                            int age = ageable.getAge();
+                            int maxAge = ageable.getMaximumAge();
+                            if (age < maxAge) {
+                                // Increment the age by one to simulate growth
+                                ageable.setAge(age + 1);
+                                state.setBlockData(ageable);
+                                state.update();
+                            }
+                        }
                     }
                 }
             }
@@ -45,15 +59,11 @@ public class PlayerHandler implements Listener {
         Material type = block.getType();
         FileConfiguration config = plugin.getConfig();
 
-        Bukkit.getLogger().info("Checking block: " + type.toString());
-
         // Check if the block type is present in the config and set to true
         if (config.contains(type.toString()) && config.getBoolean(type.toString())) {
-            Bukkit.getLogger().info("Block " + type.toString() + " is eligible for bone meal");
             return true;
         }
 
-        Bukkit.getLogger().info("Block " + type.toString() + " is not eligible for bone meal");
         return false;
     }
 }
