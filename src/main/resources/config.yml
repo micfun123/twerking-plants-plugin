@@ -1,5 +1,4 @@
 radius: 3
-radius: 3
 WHEAT: true
 CARROTS: true
 POTATOES: true
@@ -7,7 +6,6 @@ BEETROOTS: true
 PUMPKIN: true
 MELON: true
 SAPLING: true
-GRASS_BLOCK: true
 DANDELION: true
 POPPY: true
 BROWN_MUSHROOM: true
