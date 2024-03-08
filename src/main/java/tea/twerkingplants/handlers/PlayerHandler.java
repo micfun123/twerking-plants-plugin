@@ -13,7 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import tea.twerkingplants.TwerkingPlants;
 import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
-
+import org.bukkit.block.data.Ageable;
+import org.bukkit.event.block.BlockGrowEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +47,7 @@ public class PlayerHandler implements Listener {
 
     private void growTreesAroundPlayer(Player player) {
         Location playerLocation = player.getLocation();
-        FileConfiguration config = plugin.getConfig();
-        int radius = config.getInt("twerking-radius");
+        int radius = 3; // 3 block radius
 
         // Iterate through a square area around the player
         for (int x = -radius; x <= radius; x++) {
@@ -55,16 +55,28 @@ public class PlayerHandler implements Listener {
                 Location loc = playerLocation.clone().add(x, 0, z);
                 Block block = loc.getBlock();
 
-                // Check if the block is a sapling
-                if (isSapling(block.getType())) {
-                    Material saplingType = block.getType();
+                Material blockType = block.getType();
+
+                // Check if the block is a sapling or a crop
+                if (isSapling(blockType)) {
                     // Replace sapling with a grown tree of the same type
-                    TreeType treeType = getTreeTypeFromSapling(saplingType);
+                    TreeType treeType = getTreeTypeFromSapling(blockType);
                     block.setType(Material.AIR); // Clear the sapling
                     block.getWorld().generateTree(loc, treeType); // Generate the tree
 
                     // Add green particles
                     block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                } else if (isCrop(blockType)) {
+                    // Check if the crop is fully grown
+                    if (!isFullyGrownCrop(block)) {
+                        // Increment the growth stage of the crop
+                        Ageable ageable = (Ageable) block.getBlockData();
+                        if (ageable.getAge() < ageable.getMaximumAge()) {
+                            ageable.setAge(ageable.getAge() + 1);
+                            block.setBlockData(ageable);
+                            block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                        }
+                    }
                 }
             }
         }
@@ -97,6 +109,51 @@ public class PlayerHandler implements Listener {
                 return TreeType.DARK_OAK;
             default:
                 return TreeType.TREE; // Default to oak tree if the sapling type is unknown
+        }
+    }
+
+    // Helper method to check if a material is a crop
+    private boolean isCrop(Material material) {
+        return material == Material.WHEAT ||
+                material == Material.CARROTS ||
+                material == Material.POTATOES ||
+                material == Material.BEETROOTS ||
+                material == Material.NETHER_WART;
+    }
+
+    // Helper method to check if a crop block is fully grown
+    private boolean isFullyGrownCrop(Block block) {
+        switch (block.getType()) {
+            case WHEAT:
+            case POTATOES:
+            case BEETROOTS:
+            case CARROTS:
+                Ageable wheat = (Ageable) block.getBlockData();
+                return wheat.getAge() == wheat.getMaximumAge();
+            case NETHER_WART:
+                Ageable netherWart = (Ageable) block.getBlockData();
+                return netherWart.getAge() == 3;
+            default:
+                return false;
+
+        }
+    }
+
+    // Helper method to get the next growth stage of a crop
+    private Material getNextGrowthStage(Material cropType) {
+        switch (cropType) {
+            case WHEAT:
+                return Material.WHEAT;
+            case CARROTS:
+                return Material.CARROTS;
+            case POTATOES:
+                return Material.POTATOES;
+            case BEETROOTS:
+                return Material.BEETROOTS;
+            case NETHER_WART:
+                return Material.NETHER_WART;
+            default:
+                return null;
         }
     }
 }
