@@ -47,7 +47,8 @@ public class PlayerHandler implements Listener {
 
     private void growTreesAroundPlayer(Player player) {
         Location playerLocation = player.getLocation();
-        int radius = 3; // 3 block radius
+        FileConfiguration config = plugin.getConfig();
+        int radius = config.getInt("radius");
 
         // Iterate through a square area around the player
         for (int x = -radius; x <= radius; x++) {
@@ -59,13 +60,15 @@ public class PlayerHandler implements Listener {
 
                 // Check if the block is a sapling or a crop
                 if (isSapling(blockType)) {
-                    // Replace sapling with a grown tree of the same type
-                    TreeType treeType = getTreeTypeFromSapling(blockType);
-                    block.setType(Material.AIR); // Clear the sapling
-                    block.getWorld().generateTree(loc, treeType); // Generate the tree
+                    if (config.getBoolean("TREES")) {
+                        // Replace sapling with a grown tree of the same type
+                        TreeType treeType = getTreeTypeFromSapling(blockType);
+                        block.setType(Material.AIR); // Clear the sapling
+                        block.getWorld().generateTree(loc, treeType); // Generate the tree
 
-                    // Add green particles
-                    block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                        // Add green particles
+                        block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                    }
                 } else if (isCrop(blockType)) {
                     // Check if the crop is fully grown
                     if (!isFullyGrownCrop(block)) {
@@ -114,11 +117,22 @@ public class PlayerHandler implements Listener {
 
     // Helper method to check if a material is a crop
     private boolean isCrop(Material material) {
-        return material == Material.WHEAT ||
-                material == Material.CARROTS ||
-                material == Material.POTATOES ||
-                material == Material.BEETROOTS ||
-                material == Material.NETHER_WART;
+        // Check if the material is a crop block and its enabbled in the config
+        FileConfiguration config = plugin.getConfig();
+        switch (material) {
+            case WHEAT:
+                return config.getBoolean("WHEAT");
+            case CARROTS:
+                return config.getBoolean("CARROTS");
+            case POTATOES:
+                return config.getBoolean("POTATOES");
+            case BEETROOTS:
+                return config.getBoolean("BEETROOTS");
+            case NETHER_WART:
+                return config.getBoolean("NETHER_WART");
+            default:
+                return false;
+        }
     }
 
     // Helper method to check if a crop block is fully grown
