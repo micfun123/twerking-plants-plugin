@@ -3,24 +3,6 @@ WHEAT: true
 CARROTS: true
 POTATOES: true
 BEETROOTS: true
-PUMPKIN: true
-MELON: true
-SAPLING: true
-DANDELION: true
-POPPY: true
-BROWN_MUSHROOM: true
-RED_MUSHROOM: true
-SUGAR_CANE: true
-CACTUS: true
-NETHER_WART: true
 
-# Sapling types for different versions
-OAK_SAPLING: true
-SPRUCE_SAPLING: true
-BIRCH_SAPLING: true
-JUNGLE_SAPLING: true
-ACACIA_SAPLING: true
-DARK_OAK_SAPLING: true
-CRIMSON_FUNGUS: true
-WARPED_FUNGUS: true
-BAMBOO_SAPLING: true
+
+TREES: true
