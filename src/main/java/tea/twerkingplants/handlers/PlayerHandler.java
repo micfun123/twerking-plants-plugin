@@ -67,7 +67,7 @@ public class PlayerHandler implements Listener {
                         block.getWorld().generateTree(loc, treeType); // Generate the tree
 
                         // Add green particles
-                        block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                        block.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
                     }
                 } else if (isCrop(blockType)) {
                     // Check if the crop is fully grown
@@ -77,7 +77,7 @@ public class PlayerHandler implements Listener {
                         if (ageable.getAge() < ageable.getMaximumAge()) {
                             ageable.setAge(ageable.getAge() + 1);
                             block.setBlockData(ageable);
-                            block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
+                            block.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, loc.add(0.5, 0.5, 0.5), 20, 0.5, 0.5, 0.5);
                         }
                     }
                 }
@@ -92,7 +92,9 @@ public class PlayerHandler implements Listener {
                 material == Material.SPRUCE_SAPLING ||
                 material == Material.JUNGLE_SAPLING ||
                 material == Material.ACACIA_SAPLING ||
-                material == Material.DARK_OAK_SAPLING;
+                material == Material.DARK_OAK_SAPLING||
+                material == Material.PALE_OAK_SAPLING;
+
     }
 
     // Helper method to get the corresponding tree type from a sapling type
@@ -110,6 +112,8 @@ public class PlayerHandler implements Listener {
                 return TreeType.ACACIA;
             case DARK_OAK_SAPLING:
                 return TreeType.DARK_OAK;
+            case PALE_OAK_SAPLING:
+                return TreeType.PALE_OAK;
             default:
                 return TreeType.TREE; // Default to oak tree if the sapling type is unknown
         }
