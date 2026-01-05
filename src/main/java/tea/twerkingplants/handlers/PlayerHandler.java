@@ -92,9 +92,10 @@ public class PlayerHandler implements Listener {
                 material == Material.SPRUCE_SAPLING ||
                 material == Material.JUNGLE_SAPLING ||
                 material == Material.ACACIA_SAPLING ||
-                material == Material.DARK_OAK_SAPLING||
-                material == Material.PALE_OAK_SAPLING;
-
+                material == Material.DARK_OAK_SAPLING ||
+                material == Material.PALE_OAK_SAPLING ||
+                material == Material.CHERRY_SAPLING ||
+                material == Material.MANGROVE_PROPAGULE;
     }
 
     // Helper method to get the corresponding tree type from a sapling type
@@ -114,6 +115,10 @@ public class PlayerHandler implements Listener {
                 return TreeType.DARK_OAK;
             case PALE_OAK_SAPLING:
                 return TreeType.PALE_OAK;
+            case CHERRY_SAPLING:
+                return TreeType.CHERRY;
+            case MANGROVE_PROPAGULE:
+                return TreeType.MANGROVE;
             default:
                 return TreeType.TREE; // Default to oak tree if the sapling type is unknown
         }
@@ -121,7 +126,7 @@ public class PlayerHandler implements Listener {
 
     // Helper method to check if a material is a crop
     private boolean isCrop(Material material) {
-        // Check if the material is a crop block and its enabbled in the config
+        // Check if the material is a crop block and its enabled in the config
         FileConfiguration config = plugin.getConfig();
         switch (material) {
             case WHEAT:
@@ -134,6 +139,10 @@ public class PlayerHandler implements Listener {
                 return config.getBoolean("BEETROOTS");
             case NETHER_WART:
                 return config.getBoolean("NETHER_WART");
+            case TORCHFLOWER_CROP:
+                return config.getBoolean("TORCHFLOWER");
+            case PITCHER_CROP:
+                return config.getBoolean("PITCHER");
             default:
                 return false;
         }
@@ -146,14 +155,15 @@ public class PlayerHandler implements Listener {
             case POTATOES:
             case BEETROOTS:
             case CARROTS:
-                Ageable wheat = (Ageable) block.getBlockData();
-                return wheat.getAge() == wheat.getMaximumAge();
+            case TORCHFLOWER_CROP:
+            case PITCHER_CROP:
+                Ageable crop = (Ageable) block.getBlockData();
+                return crop.getAge() == crop.getMaximumAge();
             case NETHER_WART:
                 Ageable netherWart = (Ageable) block.getBlockData();
                 return netherWart.getAge() == 3;
             default:
                 return false;
-
         }
     }
 
@@ -170,6 +180,10 @@ public class PlayerHandler implements Listener {
                 return Material.BEETROOTS;
             case NETHER_WART:
                 return Material.NETHER_WART;
+            case TORCHFLOWER_CROP:
+                return Material.TORCHFLOWER_CROP;
+            case PITCHER_CROP:
+                return Material.PITCHER_CROP;
             default:
                 return null;
         }
